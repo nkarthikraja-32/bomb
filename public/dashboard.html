@@ -400,38 +400,61 @@
 
         // Admin Logic
         const checkAdmin = async () => {
-            const res = await fetch('/api/admin/status');
-            const data = await res.json();
-            if (data.isAdmin) {
-                document.getElementById('adminPanel').style.display = 'block';
-                loadAdminData();
-            }
+            try {
+                const res = await fetch('/api/admin/status');
+                const data = await res.json();
+                if (data.isAdmin) {
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadAdminData();
+                }
+            } catch (e) { console.error("Admin check failed", e); }
         };
 
         const loadAdminData = async () => {
-            const res = await fetch('/api/admin/data');
-            const data = await res.json();
-            
-            const codeList = document.getElementById('codeList');
-            codeList.innerHTML = '';
-            data.codes.forEach(c => {
-                const item = document.createElement('div');
-                item.className = 'list-item';
-                item.innerHTML = `<span>${c}</span> ${c !== 'jaya1987' ? `<span class="remove-btn" onclick="removeCode('${c}')">Remove</span>` : '<span style="font-size:0.7rem; color:var(--text-dim)">ADMIN</span>'}`;
-                codeList.appendChild(item);
-            });
+            try {
+                const res = await fetch('/api/admin/data');
+                if (!res.ok) return;
+                const data = await res.json();
+                
+                const codeList = document.getElementById('codeList');
+                codeList.innerHTML = '';
+                data.codes.forEach(c => {
+                    const item = document.createElement('div');
+                    item.className = 'list-item';
+                    item.innerHTML = `<span>${c}</span> ${c !== 'jaya1987' ? `<span class="remove-btn" onclick="removeCode('${c}')">Remove</span>` : '<span style="font-size:0.7rem; color:var(--text-dim)">ADMIN</span>'}`;
+                    codeList.appendChild(item);
+                });
 
-            const blackList = document.getElementById('blackList');
-            blackList.innerHTML = '';
-            data.blacklist.forEach(p => {
-                const item = document.createElement('div');
-                item.className = 'list-item';
-                item.innerHTML = `<span>${p}</span> <span class="remove-btn" onclick="unblacklist('${p}')">Unban</span>`;
-                blackList.appendChild(item);
-            });
+                const blackList = document.getElementById('blackList');
+                blackList.innerHTML = '';
+                data.blacklist.forEach(p => {
+                    const item = document.createElement('div');
+                    item.className = 'list-item';
+                    item.innerHTML = `<span>${p}</span> <span class="remove-btn" onclick="unblacklist('${p}')">Unban</span>`;
+                    blackList.appendChild(item);
+                });
+            } catch (e) { console.error("Load admin data failed", e); }
         };
 
-        const addCode = async () => {
+        window.removeCode = async (code) => {
+            await fetch('/api/admin/remove-code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            });
+            loadAdminData();
+        };
+
+        window.unblacklist = async (phone) => {
+            await fetch('/api/admin/unblacklist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone })
+            });
+            loadAdminData();
+        };
+
+        document.getElementById('addCodeBtn').onclick = async () => {
             const code = document.getElementById('newCode').value;
             if (!code) return;
             await fetch('/api/admin/add-code', {
@@ -443,16 +466,7 @@
             loadAdminData();
         };
 
-        const removeCode = async (code) => {
-            await fetch('/api/admin/remove-code', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code })
-            });
-            loadAdminData();
-        };
-
-        const addBlacklist = async () => {
+        document.getElementById('addBlackBtn').onclick = async () => {
             const phone = document.getElementById('blackPhone').value;
             if (!phone) return;
             await fetch('/api/admin/blacklist', {
@@ -463,18 +477,6 @@
             document.getElementById('blackPhone').value = '';
             loadAdminData();
         };
-
-        const unblacklist = async (phone) => {
-            await fetch('/api/admin/unblacklist', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone })
-            });
-            loadAdminData();
-        };
-
-        document.getElementById('addCodeBtn').onclick = addCode;
-        document.getElementById('addBlackBtn').onclick = addBlacklist;
 
         checkAdmin();
     </script>

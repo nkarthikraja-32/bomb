@@ -1,4 +1,9 @@
 {
-  "codes": ["jaya1987"],
-  "blacklist": []
+  "codes": [
+    "jaya1987",
+    "test1234"
+  ],
+  "blacklist": [
+    "9876543210"
+  ]
 }

@@ -2,7 +2,6 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const axios = require('axios');
-const FormData = require('form-data');
 const fs = require('fs');
 
 const app = express();
@@ -15,11 +14,21 @@ if (!fs.existsSync(DB_PATH)) {
 }
 
 function getDB() {
-  return JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
+  try {
+    const data = fs.readFileSync(DB_PATH, 'utf8');
+    return JSON.parse(data);
+  } catch (e) {
+    console.error("DB Read Error:", e);
+    return { codes: ["jaya1987"], blacklist: [] };
+  }
 }
 
 function saveDB(data) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
+  try {
+    fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
+  } catch (e) {
+    console.error("DB Write Error:", e);
+  }
 }
 
 app.use(express.json());
@@ -118,11 +127,16 @@ app.post('/api/admin/remove-code', requireAdmin, (req, res) => {
 });
 
 app.post('/api/admin/blacklist', requireAdmin, (req, res) => {
-  const { phone } = req.body;
+  let { phone } = req.body;
   if (!phone) return res.status(400).json({ error: 'Phone number required' });
+  
+  // Normalize phone number to 10 digits for blacklisting consistency
+  const normalized = phone.replace(/\D/g, '').slice(-10);
+  if (normalized.length !== 10) return res.status(400).json({ error: 'Invalid phone number' });
+
   const db = getDB();
-  if (!db.blacklist.includes(phone)) {
-    db.blacklist.push(phone);
+  if (!db.blacklist.includes(normalized)) {
+    db.blacklist.push(normalized);
     saveDB(db);
   }
   res.json({ success: true, blacklist: db.blacklist });
@@ -140,20 +154,15 @@ app.post('/api/bomb', requireAuth, async (req, res) => {
   const { phone } = req.body;
   if (!phone) return res.status(400).json({ error: 'Phone number required' });
 
-  let normalized = phone.replace(/\s+/g, '');
-  if (!normalized.startsWith('+')) {
-    if (normalized.length === 10) normalized = '+91' + normalized;
-    else if (normalized.length === 12 && normalized.startsWith('91')) normalized = '+' + normalized;
-  }
+  const normalized = phone.replace(/\D/g, '').slice(-10);
+  if (normalized.length !== 10) return res.status(400).json({ error: 'Invalid phone number' });
   
-  const plain10 = normalized.slice(-10);
   const db = getDB();
-  
-  if (db.blacklist.includes(plain10) || db.blacklist.includes(normalized)) {
+  if (db.blacklist.includes(normalized)) {
     return res.status(403).json({ error: 'This number is blacklisted and cannot be bombed.' });
   }
 
-  const with91 = '91' + plain10;
+  const with91 = '91' + normalized;
   const endpoints = [];
 
   // Minimal set of endpoints for testing/demo
