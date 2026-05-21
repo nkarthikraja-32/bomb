@@ -1,6 +1,6 @@
 // revenge-bomber/server.js
 const express = require('express');
-const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 const axios = require('axios');
 const FormData = require('form-data');
@@ -12,31 +12,40 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'revenge-bomber-secret-key-2026',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    sameSite: 'lax',
-    maxAge: 24 * 60 * 60 * 1000
-  }
-}));
+app.use(cookieParser());
+
+const AUTH_COOKIE = 'bomber_auth';
+const PASSCODE = 'jaya1987';
 
 const requireAuth = (req, res, next) => {
-  if (req.session.authenticated) next();
-  else res.redirect('/login');
+  if (req.cookies[AUTH_COOKIE] === PASSCODE) {
+    next();
+  } else {
+    if (req.xhr || req.path.startsWith('/api/')) {
+      res.status(401).json({ error: 'Unauthorized' });
+    } else {
+      res.redirect('/');
+    }
+  }
 };
 
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+app.get('/', (req, res) => {
+  if (req.cookies[AUTH_COOKIE] === PASSCODE) {
+    res.redirect('/dashboard');
+  } else {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  }
 });
 
 app.post('/login', (req, res) => {
   const { passcode } = req.body;
-  if (passcode === 'jaya1987') {
-    req.session.authenticated = true;
+  if (passcode === PASSCODE) {
+    res.cookie(AUTH_COOKIE, PASSCODE, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    });
     res.json({ success: true, redirect: '/dashboard' });
   } else {
     res.status(401).json({ success: false, error: 'Invalid passcode' });
@@ -45,6 +54,11 @@ app.post('/login', (req, res) => {
 
 app.get('/dashboard', requireAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+
+app.get('/logout', (req, res) => {
+  res.clearCookie(AUTH_COOKIE);
+  res.redirect('/');
 });
 
 app.post('/api/bomb', requireAuth, async (req, res) => {
