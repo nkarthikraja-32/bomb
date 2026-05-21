@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenge Bomber | Wave Control</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0b0f17;
+            font-family: 'Courier New', 'Fira Code', monospace;
+            color: #c9d1d9;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 2px solid #ff1e3c;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #ff4d6d, #ff8c00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .badge {
+            background: #ff1e3c20;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            border: 1px solid #ff1e3c;
+        }
+        .panel {
+            background: #11161f;
+            border-radius: 24px;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid #2a3440;
+        }
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .input-field {
+            flex: 2;
+            min-width: 250px;
+        }
+        label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #8b949e;
+            margin-bottom: 0.3rem;
+        }
+        input {
+            width: 100%;
+            background: #0a0f1a;
+            border: 1px solid #2d3a4e;
+            padding: 12px 16px;
+            border-radius: 14px;
+            color: #f0f6fc;
+            font-family: monospace;
+            font-size: 1rem;
+        }
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        button {
+            background: #ff1e3c;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-family: monospace;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #ff4d6d;
+            transform: scale(1.02);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .stop-btn {
+            background: #2d3a4e;
+            border: 1px solid #ff1e3c;
+        }
+        .stop-btn:hover {
+            background: #ff1e3c;
+        }
+        .stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: #0a0f1a;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            border-left: 3px solid #ff1e3c;
+        }
+        .wave-stats {
+            background: #0a0f1a;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            border-left: 3px solid #ffb347;
+            font-weight: bold;
+        }
+        .results {
+            background: #0a0f1a;
+            border-radius: 20px;
+            padding: 1rem;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 0.75rem;
+            font-family: monospace;
+        }
+        .log-entry {
+            border-bottom: 1px solid #1e2a3a;
+            padding: 0.4rem 0.2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+        .wave-header {
+            background: #1e2a3a;
+            margin-top: 0.5rem;
+            padding: 0.3rem 0.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #ffb347;
+        }
+        .success { color: #6fcf97; }
+        .fail { color: #ff5c5c; }
+        .name { font-weight: bold; color: #ffb347; min-width: 180px; }
+        .timestamp { color: #5c6e82; font-size: 0.65rem; }
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>💀 REVENGE BOMBER · WAVE MODE</h1>
+        <div class="badge">⚡ 70+ SMS GATEWAYS · WAVE 30s · INFINITE ⚡</div>
+    </header>
+
+    <div class="panel">
+        <div class="input-group">
+            <div class="input-field">
+                <label>📱 TARGET MOBILE (10 digits or +91...)</label>
+                <input type="text" id="phoneInput" placeholder="e.g., 9876543210 or +919876543210">
+            </div>
+        </div>
+        <div class="button-group">
+            <button id="startWaveBtn">▶ START WAVE BOMBING</button>
+            <button id="stopWaveBtn" class="stop-btn" disabled>⏹️ STOP</button>
+            <button id="singleBombBtn">💣 SINGLE TEST BOMB</button>
+        </div>
+        <div class="stats" id="statsArea">
+            <div class="stat-card">🌊 Wave #: 0</div>
+            <div class="stat-card">📨 Total SMS sent: 0</div>
+            <div class="stat-card">✅ Success: 0</div>
+            <div class="stat-card">❌ Failed: 0</div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem;">
+            <span>🔥 BLAST LOG (last wave at top)</span>
+            <button id="clearLog" style="background: none; border: 1px solid #ff1e3c; padding: 4px 12px; font-size: 0.7rem;">clear</button>
+        </div>
+        <div class="results" id="logContainer">
+            <div class="log-entry">⚡ Ready. Set phone number and press START WAVE BOMBING.</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // DOM elements
+    const phoneInput = document.getElementById('phoneInput');
+    const startWaveBtn = document.getElementById('startWaveBtn');
+    const stopWaveBtn = document.getElementById('stopWaveBtn');
+    const singleBombBtn = document.getElementById('singleBombBtn');
+    const logContainer = document.getElementById('logContainer');
+    const statsArea = document.getElementById('statsArea');
+
+    // State variables
+    let isBombingActive = false;
+    let waveNumber = 0;
+    let totalSuccess = 0;
+    let totalFailed = 0;
+    let totalSmsSent = 0; // total endpoints triggered across all waves
+    let nextWaveTimeout = null;
+
+    // Helper: add log entry
+    function addLog(entry, isWaveHeader = false) {
+        const div = document.createElement('div');
+        div.className = isWaveHeader ? 'wave-header' : 'log-entry';
+        const time = new Date().toLocaleTimeString();
+        if (isWaveHeader) {
+            div.innerHTML = `🌊 ${entry} — ${time}`;
+        } else {
+            div.innerHTML = `<span class="timestamp">[${time}]</span> ${entry}`;
+        }
+        logContainer.prepend(div);
+        // keep log manageable
+        while (logContainer.children.length > 500) logContainer.removeChild(logContainer.lastChild);
+    }
+
+    // Update stats panel
+    function updateStatsDisplay() {
+        statsArea.innerHTML = `
+            <div class="stat-card">🌊 Wave #: ${waveNumber}</div>
+            <div class="stat-card">📨 Total SMS sent: ${totalSmsSent}</div>
+            <div class="stat-card">✅ Success: ${totalSuccess}</div>
+            <div class="stat-card">❌ Failed: ${totalFailed}</div>
+        `;
+    }
+
+    // Single bomb request (fires one wave)
+    async function fireWave(phoneNumber, waveNum) {
+        addLog(`🚀 Wave #${waveNum} initiated for ${phoneNumber}`, true);
+        try {
+            const response = await fetch('/api/bomb', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: phoneNumber })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                const successCount = data.successCount || 0;
+                const failCount = (data.total || 0) - successCount;
+                totalSuccess += successCount;
+                totalFailed += failCount;
+                totalSmsSent += (data.total || 0);
+                addLog(`✅ Wave #${waveNum} complete — ${successCount}/${data.total} SMS triggers successful (${failCount} failed)`);
+                // Log detailed results (optional, can be commented out for less noise)
+                if (data.results && data.results.length > 0) {
+                    const failures = data.results.filter(r => !r.success);
+                    if (failures.length > 0 && failures.length < 20) {
+                        failures.forEach(r => addLog(`   ❌ ${r.name} → ${r.status || 'ERR'}`, false));
+                    } else if (failures.length >= 20) {
+                        addLog(`   ⚠️ ${failures.length} endpoints failed. Check server logs for details.`, false);
+                    }
+                }
+            } else {
+                addLog(`❌ Wave #${waveNum} server error: ${data.error || 'unknown'}`);
+            }
+        } catch (err) {
+            addLog(`💀 Wave #${waveNum} fatal: ${err.message}`);
+        }
+        updateStatsDisplay();
+    }
+
+    // Wave runner: recursive setTimeout with 30s gap after wave finishes
+    async function runWaveLoop(phoneNumber) {
+        if (!isBombingActive) return;
+        waveNumber++;
+        await fireWave(phoneNumber, waveNumber);
+        if (isBombingActive) {
+            // schedule next wave after 30 seconds (gap between waves)
+            nextWaveTimeout = setTimeout(() => {
+                runWaveLoop(phoneNumber);
+            }, 30000);
+        }
+    }
+
+    // Start wave bombing
+    function startWaveBombing() {
+        let phone = phoneInput.value.trim();
+        if (!phone) {
+            addLog('❌ Please enter a phone number first.');
+            return;
+        }
+        if (isBombingActive) {
+            addLog('⚠️ Bombing already active. Stop it first if you want to restart.');
+            return;
+        }
+        // Reset counters (optional – you may want to keep cumulative, but we'll reset for clean start)
+        waveNumber = 0;
+        totalSuccess = 0;
+        totalFailed = 0;
+        totalSmsSent = 0;
+        updateStatsDisplay();
+        addLog(`🔁 Starting INFINITE WAVE BOMBING for ${phone} — 30s gap between waves. Press STOP to end.`);
+        isBombingActive = true;
+        startWaveBtn.disabled = true;
+        stopWaveBtn.disabled = false;
+        // first wave immediately
+        runWaveLoop(phone);
+    }
+
+    // Stop wave bombing
+    function stopWaveBombing() {
+        if (!isBombingActive) return;
+        isBombingActive = false;
+        if (nextWaveTimeout) {
+            clearTimeout(nextWaveTimeout);
+            nextWaveTimeout = null;
+        }
+        addLog(`⏹️ Wave bombing stopped after ${waveNumber} wave(s). Total SMS sent: ${totalSmsSent}`);
+        startWaveBtn.disabled = false;
+        stopWaveBtn.disabled = true;
+    }
+
+    // Single test bomb (one wave, no repeat)
+    async function singleTest() {
+        let phone = phoneInput.value.trim();
+        if (!phone) {
+            addLog('❌ Enter a phone number first.');
+            return;
+        }
+        if (isBombingActive) {
+            addLog('⚠️ Wave bombing is active. Stop it first, or use single bomb after stopping.');
+            return;
+        }
+        addLog(`🧪 Single test wave for ${phone}`);
+        waveNumber = 1;
+        totalSuccess = 0;
+        totalFailed = 0;
+        totalSmsSent = 0;
+        updateStatsDisplay();
+        await fireWave(phone, 1);
+        addLog(`🏁 Single test completed.`);
+    }
+
+    // Clear logs
+    document.getElementById('clearLog').onclick = () => {
+        logContainer.innerHTML = '<div class="log-entry">🗑 Log cleared. New waves will appear here.</div>';
+    };
+
+    // Attach event listeners
+    startWaveBtn.onclick = startWaveBombing;
+    stopWaveBtn.onclick = stopWaveBombing;
+    singleBombBtn.onclick = singleTest;
+
+    // Initial UI state
+    stopWaveBtn.disabled = true;
+    updateStatsDisplay();
+</script>
+</body>
+</html>
