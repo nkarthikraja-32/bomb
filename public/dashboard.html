@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REVENGE BOMBER | DASHBOARD</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>CONTROL CENTER | DASHBOARD</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff3e3e;
-            --primary-glow: rgba(255, 62, 62, 0.2);
-            --bg: #050505;
-            --card-bg: #0f0f0f;
-            --text: #ffffff;
-            --text-dim: #888888;
-            --border: rgba(255, 255, 255, 0.1);
-            --success: #00ff88;
+            --accent: #00ff88;
+            --accent-glow: rgba(0, 255, 136, 0.2);
+            --bg: #0a0a0c;
+            --card: #141417;
+            --text: #e0e0e6;
+            --dim: #70707a;
+            --border: rgba(255, 255, 255, 0.08);
+            --danger: #ff4444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             background-color: var(--bg);
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'JetBrains Mono', monospace;
             color: var(--text);
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
@@ -36,331 +36,345 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
-            padding: 20px;
-            background: var(--card-bg);
-            border-radius: 20px;
+            margin-bottom: 32px;
+            padding: 20px 32px;
+            background: var(--card);
+            border-radius: 8px;
             border: 1px solid var(--border);
         }
 
-        .logo-section {
+        .brand {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 16px;
         }
 
-        .logo-section h1 {
-            font-size: 1.2rem;
-            letter-spacing: 2px;
+        .brand h1 {
+            font-size: 1rem;
+            letter-spacing: 4px;
             text-transform: uppercase;
         }
 
-        .logout-btn {
-            color: var(--primary);
+        .logout-link {
+            color: var(--danger);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
-            padding: 8px 20px;
-            border: 1px solid var(--primary);
-            border-radius: 10px;
-            transition: all 0.3s;
+            padding: 8px 16px;
+            border: 1px solid var(--danger);
+            border-radius: 4px;
+            transition: all 0.2s;
         }
 
-        .logout-btn:hover {
-            background: var(--primary);
+        .logout-link:hover {
+            background: var(--danger);
             color: white;
         }
 
-        .grid {
+        .layout {
             display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 20px;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
         }
 
         @media (max-width: 900px) {
-            .grid { grid-template-columns: 1fr; }
+            .layout { grid-template-columns: 1fr; }
         }
 
-        .card {
-            background: var(--card-bg);
+        .panel {
+            background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 30px;
-            margin-bottom: 20px;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
         }
 
-        .card-title {
-            font-size: 0.9rem;
-            color: var(--text-dim);
+        .panel-header {
+            font-size: 0.75rem;
+            color: var(--dim);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .input-group {
+        .panel-header::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .field {
             margin-bottom: 20px;
         }
 
         label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             margin-bottom: 8px;
-            color: var(--text-dim);
+            color: var(--dim);
+            text-transform: uppercase;
         }
 
         input {
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border);
-            padding: 14px 20px;
-            border-radius: 12px;
-            color: white;
+            padding: 12px 16px;
+            border-radius: 4px;
+            color: var(--text);
             font-family: inherit;
-            transition: all 0.3s;
+            font-size: 0.9rem;
+            transition: all 0.2s;
         }
 
         input:focus {
             outline: none;
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent);
         }
 
-        .btn-group {
+        .actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         button {
             flex: 1;
-            padding: 14px;
-            border-radius: 12px;
-            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
             font-weight: 700;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
             font-family: inherit;
         }
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
+        button:hover:not(:disabled) {
+            background: var(--accent);
+            color: var(--bg);
         }
 
-        .btn-primary:hover { filter: brightness(1.1); transform: translateY(-2px); }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+        button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            border-color: var(--dim);
+            color: var(--dim);
         }
 
-        .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
-
-        .stats-grid {
+        .stats-box {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 12px;
         }
 
-        .stat-item {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 15px;
-            border-radius: 15px;
+        .stat-card {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 16px;
+            border-radius: 4px;
             border: 1px solid var(--border);
         }
 
-        .stat-value {
-            font-size: 1.5rem;
+        .stat-val {
+            font-size: 1.2rem;
             font-weight: 700;
-            margin-top: 5px;
+            color: var(--accent);
         }
 
-        .stat-label {
-            font-size: 0.7rem;
-            color: var(--text-dim);
+        .stat-lbl {
+            font-size: 0.6rem;
+            color: var(--dim);
             text-transform: uppercase;
+            margin-top: 4px;
         }
 
-        .log-container {
-            height: 300px;
+        .console {
+            height: 280px;
             overflow-y: auto;
-            background: rgba(0,0,0,0.3);
-            border-radius: 15px;
-            padding: 15px;
-            font-family: monospace;
-            font-size: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            padding: 16px;
+            font-size: 0.75rem;
+            line-height: 1.6;
         }
 
-        .log-entry {
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+        .log-line {
+            margin-bottom: 4px;
+            border-left: 2px solid transparent;
+            padding-left: 8px;
         }
 
-        .log-time { color: var(--text-dim); margin-right: 10px; }
-        .log-success { color: var(--success); }
-        .log-error { color: var(--primary); }
+        .log-time { color: var(--dim); margin-right: 8px; }
+        .log-info { border-color: var(--accent); }
+        .log-error { border-color: var(--danger); color: var(--danger); }
 
         /* Admin Section */
-        #adminPanel {
+        #adminView {
             display: none;
-            margin-top: 40px;
-            border-top: 2px dashed var(--border);
-            padding-top: 40px;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
         }
 
         .admin-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 24px;
         }
 
-        .list-container {
-            max-height: 200px;
+        .data-list {
+            max-height: 180px;
             overflow-y: auto;
-            margin-top: 15px;
+            margin-top: 16px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
         }
 
-        .list-item {
+        .list-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
         }
 
-        .remove-btn {
-            color: var(--primary);
+        .list-row:last-child { border-bottom: none; }
+
+        .del-action {
+            color: var(--danger);
             cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 700;
+            font-size: 0.7rem;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo-section">
-                <span style="font-size: 1.5rem;">💀</span>
-                <h1>Revenge Bomber</h1>
+            <div class="brand">
+                <div style="width: 10px; height: 10px; background: var(--accent); border-radius: 2px;"></div>
+                <h1>CORE_SYSTEM_DASHBOARD</h1>
             </div>
-            <a href="/logout" class="logout-btn">Logout</a>
+            <a href="/logout" class="logout-link">TERMINATE_SESSION</a>
         </header>
 
-        <div class="grid">
-            <div class="main-col">
-                <div class="card">
-                    <div class="card-title">🚀 Bombing Control</div>
-                    <div class="input-group">
-                        <label>Target Phone Number</label>
-                        <input type="text" id="phoneInput" placeholder="+91XXXXXXXXXX">
+        <div class="layout">
+            <div class="main">
+                <div class="panel">
+                    <div class="panel-header">EXECUTION_CONTROL</div>
+                    <div class="field">
+                        <label>Target Identifier (MSISDN)</label>
+                        <input type="text" id="targetInput" placeholder="+91XXXXXXXXXX">
                     </div>
-                    <div class="btn-group">
-                        <button id="startBtn" class="btn-primary">Start Attack</button>
-                        <button id="stopBtn" class="btn-secondary" disabled>Stop</button>
+                    <div class="actions">
+                        <button id="execBtn">Execute_Sequence</button>
+                        <button id="abortBtn" disabled>Abort_Process</button>
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-title">📜 Activity Log</div>
-                    <div class="log-container" id="log">
-                        <div class="log-entry">System ready. Waiting for target...</div>
+                <div class="panel">
+                    <div class="panel-header">SYSTEM_LOG_STREAM</div>
+                    <div class="console" id="consoleOutput">
+                        <div class="log-line">SYSTEM_INITIALIZED: WAITING_FOR_INPUT...</div>
                     </div>
                 </div>
             </div>
 
-            <div class="side-col">
-                <div class="card">
-                    <div class="card-title">📊 Live Stats</div>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-label">Success</div>
-                            <div class="stat-value" id="statSuccess">0</div>
+            <div class="sidebar">
+                <div class="panel">
+                    <div class="panel-header">METRICS_ANALYSIS</div>
+                    <div class="stats-box">
+                        <div class="stat-card">
+                            <div class="stat-val" id="valSuccess">0</div>
+                            <div class="stat-lbl">Success</div>
                         </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Failed</div>
-                            <div class="stat-value" id="statFailed">0</div>
+                        <div class="stat-card">
+                            <div class="stat-val" id="valFailed">0</div>
+                            <div class="stat-lbl">Failed</div>
                         </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Waves</div>
-                            <div class="stat-value" id="statWaves">0</div>
+                        <div class="stat-card">
+                            <div class="stat-val" id="valWaves">0</div>
+                            <div class="stat-lbl">Cycles</div>
                         </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Total</div>
-                            <div class="stat-value" id="statTotal">0</div>
+                        <div class="stat-card">
+                            <div class="stat-val" id="valTotal">0</div>
+                            <div class="stat-lbl">Packets</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="adminPanel">
-            <h2 style="margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase;">🛡️ Admin Terminal (jaya1987)</h2>
+        <div id="adminView">
+            <div class="panel-header" style="margin-bottom: 24px; font-weight: 700; color: var(--accent);">ADMIN_PRIVILEGED_TERMINAL</div>
             <div class="admin-grid">
-                <div class="card">
-                    <div class="card-title">🔑 Manage Access Codes</div>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="newCode" placeholder="New Access Code">
-                        <button id="addCodeBtn" class="btn-primary" style="flex: 0 0 80px;">Add</button>
+                <div class="panel">
+                    <div class="panel-header">ACCESS_CREDENTIALS_MANAGEMENT</div>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="newKeyInput" placeholder="NEW_KEY">
+                        <button id="addKeyBtn" style="flex: 0 0 80px;">ADD</button>
                     </div>
-                    <div class="list-container" id="codeList"></div>
+                    <div class="data-list" id="keyList"></div>
                 </div>
 
-                <div class="card">
-                    <div class="card-title">🚫 Blacklist System</div>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="blackPhone" placeholder="Phone to Protect">
-                        <button id="addBlackBtn" class="btn-primary" style="flex: 0 0 80px;">Ban</button>
+                <div class="panel">
+                    <div class="panel-header">RESTRICTED_IDENTIFIERS_LIST</div>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="banInput" placeholder="BAN_TARGET">
+                        <button id="addBanBtn" style="flex: 0 0 80px;">BAN</button>
                     </div>
-                    <div class="list-container" id="blackList"></div>
+                    <div class="data-list" id="banList"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let isBombing = false;
-        let waveCount = 0;
-        let successCount = 0;
-        let failedCount = 0;
-        let totalSent = 0;
-        let timer = null;
+        let active = false;
+        let waves = 0;
+        let success = 0;
+        let failed = 0;
+        let total = 0;
+        let cycleTimer = null;
 
-        const log = (msg, type = '') => {
-            const entry = document.createElement('div');
-            entry.className = `log-entry ${type ? 'log-' + type : ''}`;
-            const time = new Date().toLocaleTimeString();
-            entry.innerHTML = `<span class="log-time">[${time}]</span> ${msg}`;
-            const logEl = document.getElementById('log');
-            logEl.prepend(entry);
+        const writeLog = (text, type = 'info') => {
+            const line = document.createElement('div');
+            line.className = `log-line log-${type}`;
+            const time = new Date().toLocaleTimeString('en-GB', { hour12: false });
+            line.innerHTML = `<span class="log-time">[${time}]</span> ${text.toUpperCase()}`;
+            const out = document.getElementById('consoleOutput');
+            out.prepend(line);
         };
 
-        const updateStats = () => {
-            document.getElementById('statSuccess').innerText = successCount;
-            document.getElementById('statFailed').innerText = failedCount;
-            document.getElementById('statWaves').innerText = waveCount;
-            document.getElementById('statTotal').innerText = totalSent;
+        const refreshMetrics = () => {
+            document.getElementById('valSuccess').innerText = success;
+            document.getElementById('valFailed').innerText = failed;
+            document.getElementById('valWaves').innerText = waves;
+            document.getElementById('valTotal').innerText = total;
         };
 
-        const startAttack = async () => {
-            const phone = document.getElementById('phoneInput').value;
-            if (!phone) return alert('Enter a phone number');
+        const executeSequence = async () => {
+            const phone = document.getElementById('targetInput').value;
+            if (!phone) return;
 
-            isBombing = true;
-            document.getElementById('startBtn').disabled = true;
-            document.getElementById('stopBtn').disabled = false;
+            active = true;
+            document.getElementById('execBtn').disabled = true;
+            document.getElementById('abortBtn').disabled = false;
             
-            log(`Initiating attack on ${phone}...`, 'success');
+            writeLog(`SEQUENCE_START: TARGETING_${phone}`, 'info');
             
-            const runWave = async () => {
-                if (!isBombing) return;
-                waveCount++;
+            const runCycle = async () => {
+                if (!active) return;
+                waves++;
                 try {
                     const res = await fetch('/api/bomb', {
                         method: 'POST',
@@ -369,45 +383,45 @@
                     });
                     const data = await res.json();
                     if (res.ok) {
-                        successCount += data.successCount;
-                        failedCount += (data.total - data.successCount);
-                        totalSent += data.total;
-                        log(`Wave ${waveCount} complete: ${data.successCount} sent successfully.`);
+                        success += data.successCount;
+                        failed += (data.total - data.successCount);
+                        total += data.total;
+                        writeLog(`CYCLE_${waves}_COMPLETE: ${data.successCount}_PACKETS_DELIVERED`);
                     } else {
-                        log(`Error: ${data.error}`, 'error');
-                        stopAttack();
+                        writeLog(`CRITICAL_ERROR: ${data.error}`, 'error');
+                        abortProcess();
                     }
                 } catch (e) {
-                    log(`Connection error during wave ${waveCount}`, 'error');
+                    writeLog(`CONNECTION_LOST: RETRYING_NEXT_CYCLE`, 'error');
                 }
-                updateStats();
-                if (isBombing) timer = setTimeout(runWave, 30000);
+                refreshMetrics();
+                if (active) cycleTimer = setTimeout(runCycle, 30000);
             };
 
-            runWave();
+            runCycle();
         };
 
-        const stopAttack = () => {
-            isBombing = false;
-            clearTimeout(timer);
-            document.getElementById('startBtn').disabled = false;
-            document.getElementById('stopBtn').disabled = true;
-            log('Attack terminated by user.');
+        const abortProcess = () => {
+            active = false;
+            clearTimeout(cycleTimer);
+            document.getElementById('execBtn').disabled = false;
+            document.getElementById('abortBtn').disabled = true;
+            writeLog('PROCESS_ABORTED_BY_OPERATOR', 'error');
         };
 
-        document.getElementById('startBtn').onclick = startAttack;
-        document.getElementById('stopBtn').onclick = stopAttack;
+        document.getElementById('execBtn').onclick = executeSequence;
+        document.getElementById('abortBtn').onclick = abortProcess;
 
-        // Admin Logic
-        const checkAdmin = async () => {
+        // Admin Functionality
+        const initAdmin = async () => {
             try {
                 const res = await fetch('/api/admin/status');
                 const data = await res.json();
                 if (data.isAdmin) {
-                    document.getElementById('adminPanel').style.display = 'block';
+                    document.getElementById('adminView').style.display = 'block';
                     loadAdminData();
                 }
-            } catch (e) { console.error("Admin check failed", e); }
+            } catch (e) {}
         };
 
         const loadAdminData = async () => {
@@ -416,27 +430,27 @@
                 if (!res.ok) return;
                 const data = await res.json();
                 
-                const codeList = document.getElementById('codeList');
-                codeList.innerHTML = '';
+                const kList = document.getElementById('keyList');
+                kList.innerHTML = '';
                 data.codes.forEach(c => {
-                    const item = document.createElement('div');
-                    item.className = 'list-item';
-                    item.innerHTML = `<span>${c}</span> ${c !== 'jaya1987' ? `<span class="remove-btn" onclick="removeCode('${c}')">Remove</span>` : '<span style="font-size:0.7rem; color:var(--text-dim)">ADMIN</span>'}`;
-                    codeList.appendChild(item);
+                    const row = document.createElement('div');
+                    row.className = 'list-row';
+                    row.innerHTML = `<span>${c}</span> ${c !== 'jaya1987' ? `<span class="del-action" onclick="deleteKey('${c}')">REVOKE</span>` : '<span style="color:var(--dim)">MASTER</span>'}`;
+                    kList.appendChild(row);
                 });
 
-                const blackList = document.getElementById('blackList');
-                blackList.innerHTML = '';
+                const bList = document.getElementById('banList');
+                bList.innerHTML = '';
                 data.blacklist.forEach(p => {
-                    const item = document.createElement('div');
-                    item.className = 'list-item';
-                    item.innerHTML = `<span>${p}</span> <span class="remove-btn" onclick="unblacklist('${p}')">Unban</span>`;
-                    blackList.appendChild(item);
+                    const row = document.createElement('div');
+                    row.className = 'list-row';
+                    row.innerHTML = `<span>${p}</span> <span class="del-action" onclick="unbanTarget('${p}')">RELEASE</span>`;
+                    bList.appendChild(row);
                 });
-            } catch (e) { console.error("Load admin data failed", e); }
+            } catch (e) {}
         };
 
-        window.removeCode = async (code) => {
+        window.deleteKey = async (code) => {
             await fetch('/api/admin/remove-code', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -445,7 +459,7 @@
             loadAdminData();
         };
 
-        window.unblacklist = async (phone) => {
+        window.unbanTarget = async (phone) => {
             await fetch('/api/admin/unblacklist', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -454,31 +468,31 @@
             loadAdminData();
         };
 
-        document.getElementById('addCodeBtn').onclick = async () => {
-            const code = document.getElementById('newCode').value;
+        document.getElementById('addKeyBtn').onclick = async () => {
+            const code = document.getElementById('newKeyInput').value;
             if (!code) return;
             await fetch('/api/admin/add-code', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code })
             });
-            document.getElementById('newCode').value = '';
+            document.getElementById('newKeyInput').value = '';
             loadAdminData();
         };
 
-        document.getElementById('addBlackBtn').onclick = async () => {
-            const phone = document.getElementById('blackPhone').value;
+        document.getElementById('addBanBtn').onclick = async () => {
+            const phone = document.getElementById('banInput').value;
             if (!phone) return;
             await fetch('/api/admin/blacklist', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone })
             });
-            document.getElementById('blackPhone').value = '';
+            document.getElementById('banInput').value = '';
             loadAdminData();
         };
 
-        checkAdmin();
+        initAdmin();
     </script>
 </body>
 </html>
