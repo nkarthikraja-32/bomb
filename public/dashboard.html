@@ -276,7 +276,7 @@
                         <input type="text" id="targetInput" placeholder="+91XXXXXXXXXX">
                     </div>
                     <div class="actions">
-                        <button id="execBtn">Execute_Sequence</button>
+                        <button id="execBtn">Execute_Wave</button>
                         <button id="abortBtn" disabled>Abort_Process</button>
                     </div>
                 </div>
@@ -363,14 +363,14 @@
         };
 
         const executeSequence = async () => {
-            const phone = document.getElementById('targetInput').value;
+            const phone = document.getElementById('targetInput').value.trim();
             if (!phone) return;
 
             active = true;
             document.getElementById('execBtn').disabled = true;
             document.getElementById('abortBtn').disabled = false;
             
-            writeLog(`SEQUENCE_START: TARGETING_${phone}`, 'info');
+            writeLog(`WAVE_START: TARGETING_${phone}`, 'info');
             
             const runCycle = async () => {
                 if (!active) return;
@@ -386,7 +386,7 @@
                         success += data.successCount;
                         failed += (data.total - data.successCount);
                         total += data.total;
-                        writeLog(`CYCLE_${waves}_COMPLETE: ${data.successCount}_PACKETS_DELIVERED`);
+                        writeLog(`WAVE_${waves}_COMPLETE: ${data.successCount}/${data.total}_REQUESTS_SUCCESS`);
                     } else {
                         writeLog(`CRITICAL_ERROR: ${data.error}`, 'error');
                         abortProcess();
