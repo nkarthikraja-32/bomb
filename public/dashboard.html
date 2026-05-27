@@ -3,32 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CONTROL CENTER | DASHBOARD</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>CONTROL CENTER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent: #00ff88;
-            --accent-glow: rgba(0, 255, 136, 0.2);
-            --bg: #0a0a0c;
-            --card: #141417;
-            --text: #e0e0e6;
-            --dim: #70707a;
-            --border: rgba(255, 255, 255, 0.08);
-            --danger: #ff4444;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #212529;
+            --primary: #0d6efd;
+            --danger: #dc3545;
+            --border: #dee2e6;
+            --secondary: #6c757d;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             background-color: var(--bg);
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Inter', sans-serif;
             color: var(--text);
-            min-height: 100vh;
-            padding: 24px;
+            line-height: 1.5;
+            padding: 16px;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 600px;
             margin: 0 auto;
         }
 
@@ -36,345 +35,208 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 32px;
-            padding: 20px 32px;
-            background: var(--card);
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .brand h1 {
-            font-size: 1rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        .logout-link {
-            color: var(--danger);
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 8px 16px;
-            border: 1px solid var(--danger);
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-
-        .logout-link:hover {
-            background: var(--danger);
-            color: white;
-        }
-
-        .layout {
-            display: grid;
-            grid-template-columns: 1fr 320px;
-            gap: 24px;
-        }
-
-        @media (max-width: 900px) {
-            .layout { grid-template-columns: 1fr; }
-        }
-
-        .panel {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 24px;
             margin-bottom: 24px;
         }
 
-        .panel-header {
-            font-size: 0.75rem;
-            color: var(--dim);
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        h1 { font-size: 1.25rem; font-weight: 700; }
+
+        .logout-btn {
+            color: var(--danger);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .panel-header::before {
-            content: '';
-            width: 4px;
-            height: 4px;
-            background: var(--accent);
-            border-radius: 50%;
-        }
-
-        .field {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.7rem;
-            margin-bottom: 8px;
-            color: var(--dim);
+        .card-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--secondary);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
         }
 
+        .input-group { margin-bottom: 16px; }
+        label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 4px; }
+        
         input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.2);
+            padding: 10px 12px;
             border: 1px solid var(--border);
-            padding: 12px 16px;
             border-radius: 4px;
-            color: var(--text);
+            font-size: 1rem;
             font-family: inherit;
-            font-size: 0.9rem;
-            transition: all 0.2s;
         }
 
-        input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
+        input:focus { outline: none; border-color: var(--primary); }
 
-        .actions {
-            display: flex;
-            gap: 12px;
-        }
+        .btn-group { display: flex; gap: 8px; }
 
         button {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border-radius: 4px;
-            border: 1px solid var(--accent);
-            background: transparent;
-            color: var(--accent);
-            font-weight: 700;
-            font-size: 0.8rem;
+            border: none;
+            font-weight: 600;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s;
             font-family: inherit;
+            transition: opacity 0.2s;
         }
 
-        button:hover:not(:disabled) {
-            background: var(--accent);
-            color: var(--bg);
-        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            border-color: var(--dim);
-            color: var(--dim);
-        }
-
-        .stats-box {
+        .stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
+            margin-bottom: 16px;
         }
 
-        .stat-card {
-            background: rgba(0, 0, 0, 0.15);
-            padding: 16px;
+        .stat-item {
+            background: #f1f3f5;
+            padding: 12px;
             border-radius: 4px;
-            border: 1px solid var(--border);
+            text-align: center;
         }
 
-        .stat-val {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .stat-lbl {
-            font-size: 0.6rem;
-            color: var(--dim);
-            text-transform: uppercase;
-            margin-top: 4px;
-        }
+        .stat-val { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
+        .stat-lbl { font-size: 0.75rem; color: var(--secondary); }
 
         .console {
-            height: 280px;
+            height: 200px;
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.3);
+            background: #212529;
+            color: #f8f9fa;
+            padding: 12px;
             border-radius: 4px;
-            padding: 16px;
+            font-family: monospace;
             font-size: 0.75rem;
-            line-height: 1.6;
         }
 
-        .log-line {
-            margin-bottom: 4px;
-            border-left: 2px solid transparent;
-            padding-left: 8px;
-        }
+        .log-entry { margin-bottom: 4px; }
+        .log-time { color: #adb5bd; margin-right: 8px; }
+        .log-error { color: #ff8787; }
 
-        .log-time { color: var(--dim); margin-right: 8px; }
-        .log-info { border-color: var(--accent); }
-        .log-error { border-color: var(--danger); color: var(--danger); }
+        /* Admin section */
+        #adminSection { display: none; margin-top: 24px; border-top: 2px solid var(--border); padding-top: 24px; }
 
-        /* Admin Section */
-        #adminView {
-            display: none;
-            margin-top: 32px;
-            padding-top: 32px;
-            border-top: 1px solid var(--border);
-        }
-
-        .admin-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        .data-list {
-            max-height: 180px;
+        .list-container {
+            margin-top: 12px;
+            max-height: 150px;
             overflow-y: auto;
-            margin-top: 16px;
             border: 1px solid var(--border);
             border-radius: 4px;
         }
 
-        .list-row {
+        .list-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 8px 12px;
             border-bottom: 1px solid var(--border);
-            font-size: 0.8rem;
+            font-size: 0.875rem;
         }
 
-        .list-row:last-child { border-bottom: none; }
-
-        .del-action {
-            color: var(--danger);
-            cursor: pointer;
-            font-size: 0.7rem;
-            text-decoration: underline;
-        }
+        .list-item:last-child { border-bottom: none; }
+        .remove-link { color: var(--danger); cursor: pointer; font-size: 0.75rem; font-weight: 600; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="brand">
-                <div style="width: 10px; height: 10px; background: var(--accent); border-radius: 2px;"></div>
-                <h1>CORE_SYSTEM_DASHBOARD</h1>
-            </div>
-            <a href="/logout" class="logout-link">TERMINATE_SESSION</a>
+            <h1>Control Center</h1>
+            <a href="/logout" class="logout-btn">Logout</a>
         </header>
 
-        <div class="layout">
-            <div class="main">
-                <div class="panel">
-                    <div class="panel-header">EXECUTION_CONTROL</div>
-                    <div class="field">
-                        <label>Target Identifier (MSISDN)</label>
-                        <input type="text" id="targetInput" placeholder="+91XXXXXXXXXX">
-                    </div>
-                    <div class="actions">
-                        <button id="execBtn">Execute_Wave</button>
-                        <button id="abortBtn" disabled>Abort_Process</button>
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <div class="panel-header">SYSTEM_LOG_STREAM</div>
-                    <div class="console" id="consoleOutput">
-                        <div class="log-line">SYSTEM_INITIALIZED: WAITING_FOR_INPUT...</div>
-                    </div>
-                </div>
+        <div class="card">
+            <div class="card-title">Execution</div>
+            <div class="input-group">
+                <label>Target Number</label>
+                <input type="text" id="targetInput" placeholder="99XXXXXXXX">
             </div>
-
-            <div class="sidebar">
-                <div class="panel">
-                    <div class="panel-header">METRICS_ANALYSIS</div>
-                    <div class="stats-box">
-                        <div class="stat-card">
-                            <div class="stat-val" id="valSuccess">0</div>
-                            <div class="stat-lbl">Success</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-val" id="valFailed">0</div>
-                            <div class="stat-lbl">Failed</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-val" id="valWaves">0</div>
-                            <div class="stat-lbl">Cycles</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-val" id="valTotal">0</div>
-                            <div class="stat-lbl">Packets</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="btn-group">
+                <button id="startBtn" class="btn-primary">Start Wave</button>
+                <button id="stopBtn" class="btn-danger" disabled>Stop</button>
             </div>
         </div>
 
-        <div id="adminView">
-            <div class="panel-header" style="margin-bottom: 24px; font-weight: 700; color: var(--accent);">ADMIN_PRIVILEGED_TERMINAL</div>
-            <div class="admin-grid">
-                <div class="panel">
-                    <div class="panel-header">ACCESS_CREDENTIALS_MANAGEMENT</div>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="text" id="newKeyInput" placeholder="NEW_KEY">
-                        <button id="addKeyBtn" style="flex: 0 0 80px;">ADD</button>
-                    </div>
-                    <div class="data-list" id="keyList"></div>
+        <div class="card">
+            <div class="card-title">Metrics</div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-val" id="successVal">0</div>
+                    <div class="stat-lbl">Success</div>
                 </div>
+                <div class="stat-item">
+                    <div class="stat-val" id="waveVal">0</div>
+                    <div class="stat-lbl">Waves</div>
+                </div>
+            </div>
+            <div class="console" id="logBox">
+                <div class="log-entry">System ready...</div>
+            </div>
+        </div>
 
-                <div class="panel">
-                    <div class="panel-header">RESTRICTED_IDENTIFIERS_LIST</div>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="text" id="banInput" placeholder="BAN_TARGET">
-                        <button id="addBanBtn" style="flex: 0 0 80px;">BAN</button>
-                    </div>
-                    <div class="data-list" id="banList"></div>
+        <div id="adminSection">
+            <div class="card">
+                <div class="card-title">Access Codes</div>
+                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                    <input type="text" id="newCodeInput" placeholder="New Code">
+                    <button id="addCodeBtn" class="btn-primary" style="flex: 0 0 80px;">Add</button>
                 </div>
+                <div class="list-container" id="codeList"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Blacklist</div>
+                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                    <input type="text" id="newBanInput" placeholder="99XXXXXXXX">
+                    <button id="addBanBtn" class="btn-primary" style="flex: 0 0 80px;">Ban</button>
+                </div>
+                <div class="list-container" id="banList"></div>
             </div>
         </div>
     </div>
 
     <script>
-        let active = false;
-        let waves = 0;
-        let success = 0;
-        let failed = 0;
-        let total = 0;
-        let cycleTimer = null;
+        let running = false;
+        let waveCount = 0;
+        let successCount = 0;
+        let timer = null;
 
-        const writeLog = (text, type = 'info') => {
-            const line = document.createElement('div');
-            line.className = `log-line log-${type}`;
+        const log = (msg, isError = false) => {
+            const div = document.createElement('div');
+            div.className = `log-entry ${isError ? 'log-error' : ''}`;
             const time = new Date().toLocaleTimeString('en-GB', { hour12: false });
-            line.innerHTML = `<span class="log-time">[${time}]</span> ${text.toUpperCase()}`;
-            const out = document.getElementById('consoleOutput');
-            out.prepend(line);
+            div.innerHTML = `<span class="log-time">[${time}]</span> ${msg}`;
+            const box = document.getElementById('logBox');
+            box.prepend(div);
         };
 
-        const refreshMetrics = () => {
-            document.getElementById('valSuccess').innerText = success;
-            document.getElementById('valFailed').innerText = failed;
-            document.getElementById('valWaves').innerText = waves;
-            document.getElementById('valTotal').innerText = total;
-        };
-
-        const executeSequence = async () => {
+        const startWave = async () => {
             const phone = document.getElementById('targetInput').value.trim();
             if (!phone) return;
 
-            active = true;
-            document.getElementById('execBtn').disabled = true;
-            document.getElementById('abortBtn').disabled = false;
+            running = true;
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
             
-            writeLog(`WAVE_START: TARGETING_${phone}`, 'info');
-            
-            const runCycle = async () => {
-                if (!active) return;
-                waves++;
+            const run = async () => {
+                if (!running) return;
+                waveCount++;
+                log(`Wave ${waveCount} started: targeting ${phone}`);
+                
                 try {
                     const res = await fetch('/api/bomb', {
                         method: 'POST',
@@ -382,117 +244,115 @@
                         body: JSON.stringify({ phone })
                     });
                     const data = await res.json();
+                    
                     if (res.ok) {
-                        success += data.successCount;
-                        failed += (data.total - data.successCount);
-                        total += data.total;
-                        writeLog(`WAVE_${waves}_COMPLETE: ${data.successCount}/${data.total}_REQUESTS_SUCCESS`);
+                        successCount += data.successCount;
+                        document.getElementById('successVal').innerText = successCount;
+                        document.getElementById('waveVal').innerText = waveCount;
+                        log(`Wave ${waveCount} complete: ${data.successCount}/${data.total} success`);
+                        log(`Cooldown: 35 seconds...`);
+                        timer = setTimeout(run, 35000);
                     } else {
-                        writeLog(`CRITICAL_ERROR: ${data.error}`, 'error');
-                        abortProcess();
+                        log(`Error: ${data.error}`, true);
+                        stopWave();
                     }
                 } catch (e) {
-                    writeLog(`CONNECTION_LOST: RETRYING_NEXT_CYCLE`, 'error');
+                    log(`Connection error, retrying...`, true);
+                    timer = setTimeout(run, 5000);
                 }
-                refreshMetrics();
-                if (active) cycleTimer = setTimeout(runCycle, 30000);
             };
-
-            runCycle();
+            run();
         };
 
-        const abortProcess = () => {
-            active = false;
-            clearTimeout(cycleTimer);
-            document.getElementById('execBtn').disabled = false;
-            document.getElementById('abortBtn').disabled = true;
-            writeLog('PROCESS_ABORTED_BY_OPERATOR', 'error');
+        const stopWave = () => {
+            running = false;
+            clearTimeout(timer);
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            log(`Process stopped.`);
         };
 
-        document.getElementById('execBtn').onclick = executeSequence;
-        document.getElementById('abortBtn').onclick = abortProcess;
+        document.getElementById('startBtn').onclick = startWave;
+        document.getElementById('stopBtn').onclick = stopWave;
 
-        // Admin Functionality
-        const initAdmin = async () => {
-            try {
-                const res = await fetch('/api/admin/status');
-                const data = await res.json();
-                if (data.isAdmin) {
-                    document.getElementById('adminView').style.display = 'block';
-                    loadAdminData();
-                }
-            } catch (e) {}
-        };
-
-        const loadAdminData = async () => {
+        // Admin
+        const refreshAdmin = async () => {
             try {
                 const res = await fetch('/api/admin/data');
                 if (!res.ok) return;
                 const data = await res.json();
                 
-                const kList = document.getElementById('keyList');
-                kList.innerHTML = '';
+                const cList = document.getElementById('codeList');
+                cList.innerHTML = '';
                 data.codes.forEach(c => {
-                    const row = document.createElement('div');
-                    row.className = 'list-row';
-                    row.innerHTML = `<span>${c}</span> ${c !== 'jaya1987' ? `<span class="del-action" onclick="deleteKey('${c}')">REVOKE</span>` : '<span style="color:var(--dim)">MASTER</span>'}`;
-                    kList.appendChild(row);
+                    const div = document.createElement('div');
+                    div.className = 'list-item';
+                    div.innerHTML = `<span>${c}</span> ${c !== 'jaya1987' ? `<span class="remove-link" onclick="removeCode('${c}')">Remove</span>` : ''}`;
+                    cList.appendChild(div);
                 });
 
                 const bList = document.getElementById('banList');
                 bList.innerHTML = '';
                 data.blacklist.forEach(p => {
-                    const row = document.createElement('div');
-                    row.className = 'list-row';
-                    row.innerHTML = `<span>${p}</span> <span class="del-action" onclick="unbanTarget('${p}')">RELEASE</span>`;
-                    bList.appendChild(row);
+                    const div = document.createElement('div');
+                    div.className = 'list-item';
+                    div.innerHTML = `<span>${p}</span> <span class="remove-link" onclick="unban('${p}')">Unban</span>`;
+                    bList.appendChild(div);
                 });
             } catch (e) {}
         };
 
-        window.deleteKey = async (code) => {
+        window.removeCode = async (code) => {
             await fetch('/api/admin/remove-code', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code })
             });
-            loadAdminData();
+            refreshAdmin();
         };
 
-        window.unbanTarget = async (phone) => {
+        window.unban = async (phone) => {
             await fetch('/api/admin/unblacklist', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone })
             });
-            loadAdminData();
+            refreshAdmin();
         };
 
-        document.getElementById('addKeyBtn').onclick = async () => {
-            const code = document.getElementById('newKeyInput').value;
+        document.getElementById('addCodeBtn').onclick = async () => {
+            const code = document.getElementById('newCodeInput').value.trim();
             if (!code) return;
             await fetch('/api/admin/add-code', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code })
             });
-            document.getElementById('newKeyInput').value = '';
-            loadAdminData();
+            document.getElementById('newCodeInput').value = '';
+            refreshAdmin();
         };
 
         document.getElementById('addBanBtn').onclick = async () => {
-            const phone = document.getElementById('banInput').value;
+            const phone = document.getElementById('newBanInput').value.trim();
             if (!phone) return;
             await fetch('/api/admin/blacklist', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone })
             });
-            document.getElementById('banInput').value = '';
-            loadAdminData();
+            document.getElementById('newBanInput').value = '';
+            refreshAdmin();
         };
 
-        initAdmin();
+        // Check Admin Status
+        (async () => {
+            const res = await fetch('/api/admin/status');
+            const data = await res.json();
+            if (data.isAdmin) {
+                document.getElementById('adminSection').style.display = 'block';
+                refreshAdmin();
+            }
+        })();
     </script>
 </body>
 </html>

